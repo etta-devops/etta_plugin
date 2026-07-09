@@ -1,0 +1,58 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '26'
+
+      - name: Set up Maven 3.9.16
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.9.16
+
+      - name: Configure Maven settings
+        uses: s4u/maven-settings-action@v3.1.0
+        with:
+          mirrors: |
+            [{
+              "id": "ukheshe-group-release-mirror",
+              "name": "Direct to Our Repo",
+              "url": "https://mvn.ukheshe.rocks/artifactory/libs-release",
+              "mirrorOf": "com.ukheshe*"
+            }]
+          servers: |
+            [{
+              "id": "JGREL",
+              "username": "${{ secrets.JGREL_USERNAME }}",
+              "password": "${{ secrets.JGREL_PASSWORD }}"
+            }]
+          repositories: |
+            [{
+              "id": "JGREL",
+              "url": "https://mvn.ukheshe.rocks/artifactory/libs-release",
+              "releases": { "enabled": true, "updatePolicy": "daily" },
+              "snapshots": { "enabled": false }
+            }]
+
+      - name: Build jar
+        run: mvn -B clean package
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-payment-jar
+          path: target/*.jar

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <name>Example Payment Plugin</name>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>uk-plugin-demo-payment</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+
+
+    <parent>
+        <groupId>com.ukheshe</groupId>
+        <artifactId>eclipse</artifactId>
+        <version>[5.0.3750,6.0)</version>
+    </parent>
+
+        <dependencies>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-wallet-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-wallet-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-fraud-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-fraud-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-payment-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-payment-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-loan-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-loan-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>uk-services-user-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ukheshe</groupId>
+            <artifactId>eclipse-conductor</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <release>${uk.jvm.version}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
