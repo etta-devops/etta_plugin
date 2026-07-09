@@ -48,7 +48,7 @@ jobs:
               "releases": { "enabled": true, "updatePolicy": "daily" },
               "snapshots": { "enabled": false }
             }]
-          plugin_repositories: |
+          pluginRepositories: |
             [{
               "id": "JGREL",
               "url": "https://mvn.ukheshe.rocks/artifactory/libs-release",
@@ -64,3 +64,33 @@ jobs:
         with:
           name: plugin-payment-jar
           path: target/*.jar
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download jar
+        uses: actions/download-artifact@v4
+        with:
+          name: plugin-payment-jar
+          path: artifact
+
+      - name: Login
+        id: login
+        run: |
+          RESPONSE=$(curl -sf -X POST "${{ secrets.LOGIN_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"identity\":\"${{ secrets.LOGIN_USERNAME }}\",\"password\":\"${{ secrets.LOGIN_PASSWORD }}\"}")
+          HEADER_VALUE=$(echo "$RESPONSE" | jq -r '.headerValue')
+          echo "::add-mask::$HEADER_VALUE"
+          echo "header_value=$HEADER_VALUE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload plugin
+        run: |
+          JAR_FILE=$(find artifact -maxdepth 1 -name '*.jar' | head -n1)
+          BASE64_JAR=$(base64 -w 0 "$JAR_FILE")
+          curl -sf -X POST "${{ secrets.UPLOAD_URL }}" \
+            -H "Authorization: ${{ steps.login.outputs.header_value }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"base64EncodedJar\":\"$BASE64_JAR\",\"versionDescription\":\"Github Actions Run\"}"
