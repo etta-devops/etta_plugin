@@ -41,7 +41,7 @@ public class ExamplePaymentGateway extends PluggablePaymentGateway {
         paymentData.put("amount", dbPayment.getAmount().toString());
         paymentData.put("reference", "default_reference");
         
-        Long walletId = dbPayment.getWalletId();
+        String walletId = dbPayment.getExternalWalletId();
         if (walletId == null) {
             throw new IllegalArgumentException("walletId is required for ET_WALLET_ETTA");
         }

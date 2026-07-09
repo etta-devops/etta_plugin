@@ -67,6 +67,10 @@ public class ExamplePaymentProcessor implements IPaymentProcessor {
             throw new IllegalArgumentException("amount must be greater than zero for ET_WALLET_ETTA");
         }
 
+        if (eclipsePayment.getExternalWalletId() == null) {
+            throw new IllegalArgumentException("externalWalletId is required for ET_WALLET_ETTA");
+        }
+
         UK.Tracing.logOnCurrentSpan("Test Plugin Payment processor");
         newPayment.setGateway("etta-biruk");
     }
