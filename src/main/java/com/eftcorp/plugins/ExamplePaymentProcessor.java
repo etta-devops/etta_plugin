@@ -55,12 +55,16 @@ public class ExamplePaymentProcessor implements IPaymentProcessor {
 
     @Override
     public void enrichForCreation(NewEclipsePayment eclipsePayment, NewPayment newPayment) {
+        if (eclipsePayment.getWalletId() == null) {
+            throw new IllegalArgumentException("walletId is required for ET_WALLET_ETTA");
+        }
+        
         if (eclipsePayment.getReference() == null) {
-            throw new IllegalArgumentException("reference is required for EXAMPLE_WALLET_TRANSFER");
+            throw new IllegalArgumentException("reference is required for ET_WALLET_ETTA");
         }
 
         if (eclipsePayment.getAmount() == null || eclipsePayment.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("amount must be greater than zero for EXAMPLE_WALLET_TRANSFER");
+            throw new IllegalArgumentException("amount must be greater than zero for ET_WALLET_ETTA");
         }
 
         UK.Tracing.logOnCurrentSpan("Test Plugin Payment processor");

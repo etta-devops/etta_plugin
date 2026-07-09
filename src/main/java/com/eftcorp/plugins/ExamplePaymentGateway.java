@@ -38,11 +38,16 @@ public class ExamplePaymentGateway extends PluggablePaymentGateway {
         DbPayment dbPayment = super.getDbPayment();
 
         HashMap<String, Object> paymentData = new HashMap<>();
-        paymentData.put("amount", 100);
-        paymentData.put("reference", "My reference");
+        paymentData.put("amount", dbPayment.getAmount().toString());
+        paymentData.put("reference", "default_reference");
+        
+        long walletId = dbPayment.getWalletId();
+        if (walletId == 0) {
+            throw new IllegalArgumentException("walletId is required for ET_WALLET_ETTA");
+        }
 
         // call external api
-        restClient.postResource(paymentData, "https://payment.odoo.et/api/accounts/acc_f9c4e3b1/topup");
+        restClient.postResource(paymentData, "https://payment.odoo.et/api/accounts/" + walletId + "/topup");
 
         UK.Tracing.logOnCurrentSpan(UK.Json.toJson(dbPayment));
     }
