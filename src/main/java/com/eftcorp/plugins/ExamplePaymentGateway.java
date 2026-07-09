@@ -38,7 +38,7 @@ public class ExamplePaymentGateway extends PluggablePaymentGateway {
         DbPayment dbPayment = super.getDbPayment();
 
         HashMap<String, Object> paymentData = new HashMap<>();
-        paymentData.put("amount", dbPayment.getAmount().toString());
+        paymentData.put("amount", dbPayment.getAmount());
         paymentData.put("reference", "default_reference");
         
         String walletId = dbPayment.getExternalWalletId();
