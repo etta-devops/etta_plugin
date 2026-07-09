@@ -18,6 +18,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '26'
+          cache: maven
 
       - name: Set up Maven 3.9.16
         uses: stCarolas/setup-maven@v5
@@ -41,6 +42,13 @@ jobs:
               "password": "${{ secrets.JGREL_PASSWORD }}"
             }]
           repositories: |
+            [{
+              "id": "JGREL",
+              "url": "https://mvn.ukheshe.rocks/artifactory/libs-release",
+              "releases": { "enabled": true, "updatePolicy": "daily" },
+              "snapshots": { "enabled": false }
+            }]
+          plugin_repositories: |
             [{
               "id": "JGREL",
               "url": "https://mvn.ukheshe.rocks/artifactory/libs-release",
